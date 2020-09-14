@@ -1,0 +1,75 @@
+﻿using System;
+using System.Net.Http;
+using System.Threading.Tasks;
+using Newtonsoft.Json;
+using ReadMeterApp.Exceptions;
+using ReadMeterApp.Models;
+
+namespace ReadMeterApp.Services
+{
+    public interface IBlickerService
+    {
+        Task<BlickerResult> Read(byte[] image);
+
+        Task<AliveResult> Alive();
+    }
+
+    public class BlickerService : IDisposable, IBlickerService
+    {
+        private readonly HttpClient _httpClient;
+
+        public BlickerService()
+        {
+            _httpClient = new HttpClient {BaseAddress = new Uri("https://api.blicker.ai")};
+            _httpClient.DefaultRequestHeaders.Add("subscription-key", "84fa0c01037b4b48b38e5a2582aaafc9");
+        }
+
+        public async Task<BlickerResult> Read(byte[] image)
+        {
+            using var content = new MultipartFormDataContent
+            {
+                { new ByteArrayContent(image, 0, image.Length), "image", "UploadFile" },
+                { new StringContent(string.Empty), "ranges" },
+                { new StringContent(string.Empty), "serialNumber" },
+                { new StringContent(string.Empty), "referenceId" },
+                { new StringContent(string.Empty), "meterCategory" },
+                { new StringContent(string.Empty), "displayType" },
+                { new StringContent(string.Empty), "language" },
+                { new StringContent(string.Empty), "nDigits" },
+                { new StringContent(string.Empty), "nDisplays" },
+                { new StringContent(string.Empty), "GPSLocation" },
+                { new StringContent(string.Empty), "datetime" }
+            };
+
+            using var response = await _httpClient.PostAsync("/blicker/2020-05-01", content);
+            var apiResponse = await response.Content.ReadAsStringAsync();
+
+            if (response.IsSuccessStatusCode)
+            {
+                return JsonConvert.DeserializeObject<BlickerResult>(apiResponse);
+            }
+
+            throw new BlickerApiException(JsonConvert.DeserializeObject<BlickerValidationError>(apiResponse));
+        }
+
+        public async Task<AliveResult> Alive()
+        {
+            using var response = await _httpClient.GetAsync("/alive");
+            response.EnsureSuccessStatusCode();
+            var apiResponse = await response.Content.ReadAsStringAsync();
+
+            if (response.IsSuccessStatusCode)
+            {
+                return JsonConvert.DeserializeObject<AliveResult>(apiResponse);
+            }
+
+            throw new BlickerApiException(JsonConvert.DeserializeObject<BlickerValidationError>(apiResponse));
+        }
+
+
+        public void Dispose()
+        {
+            _httpClient?.Dispose();
+        }
+    }
+}

@@ -1,0 +1,7 @@
+{
+  "name": "ReadMeterApp",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular"
+}
