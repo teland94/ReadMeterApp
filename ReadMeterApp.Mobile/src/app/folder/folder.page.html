@@ -16,9 +16,12 @@
 
   <div id="container">
     <ion-item>
+      <ion-button (click)="loadCamera()">Сфотографировать</ion-button>
+    </ion-item>
+    <ion-item>
       <ion-label id="image" color="primary">Image</ion-label>
       <ion-input type="file" accept="image/*" (change)="handleFileInput($event.target.files)"></ion-input>
-      <ion-button [disabled]="!file" (click)="read()">Прочитать</ion-button>
+      <ion-button [disabled]="!image" (click)="read()">Прочитать</ion-button>
     </ion-item>
     <ion-item *ngIf="image">
       <div style="max-height: 50%; max-width: 50%">

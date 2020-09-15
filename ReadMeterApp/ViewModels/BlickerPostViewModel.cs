@@ -1,11 +1,11 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using Microsoft.AspNetCore.Http;
+using DataUtils;
 
 namespace ReadMeterApp.ViewModels
 {
     public class BlickerPostViewModel
     {
         [Required]
-        public IFormFile Image { get; set; }
+        public string Image { get; set; }
     }
 }

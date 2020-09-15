@@ -12,7 +12,7 @@ namespace ReadMeterApp.Models
         public string Language { get; set; }
 
         [JsonProperty("messages")]
-        public object[] Messages { get; set; }
+        public Message[] Messages { get; set; }
 
         [JsonProperty("metaData")]
         public MetaData MetaData { get; set; }
@@ -60,7 +60,7 @@ namespace ReadMeterApp.Models
         public string DisplayType { get; set; }
 
         [JsonProperty("messages")]
-        public object[] Messages { get; set; }
+        public Message[] Messages { get; set; }
 
         [JsonProperty("objectId")]
         public string ObjectId { get; set; }
@@ -90,12 +90,27 @@ namespace ReadMeterApp.Models
         public long Index { get; set; }
 
         [JsonProperty("messages")]
-        public object[] Messages { get; set; }
+        public Message[] Messages { get; set; }
 
         [JsonProperty("objectId")]
         public string ObjectId { get; set; }
 
         [JsonProperty("value")]
         public string Value { get; set; }
+    }
+
+    public class Message
+    {
+        [JsonProperty("code")]
+        public string Code { get; set; }
+
+        [JsonProperty("messageId")]
+        public string MessageId { get; set; }
+
+        [JsonProperty("message")]
+        public string MessageText { get; set; }
+
+        [JsonProperty("objectId")]
+        public string ObjectId { get; set; }
     }
 }

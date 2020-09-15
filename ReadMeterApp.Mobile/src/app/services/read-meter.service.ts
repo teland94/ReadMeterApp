@@ -9,10 +9,10 @@ export class ReadMeterService {
 
   constructor(private readonly httpClient: HttpClient) { }
 
-  read(imageFile: File) {
+  read(image: string) {
     const formData = new FormData();
-    formData.append('image', imageFile);
+    formData.append('image', image);
 
-    return this.httpClient.post<ReadMeterResult>('ReadMeter', formData);
+    return this.httpClient.post<ReadMeterResult>('ReadMeter', formData).toPromise();
   }
 }

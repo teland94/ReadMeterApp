@@ -1,11 +1,24 @@
 <ion-header>
   <ion-toolbar>
-    <ion-title>Result</ion-title>
+    <ion-title>Результат</ion-title>
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true">
-  <ion-item *ngIf="readMeterResult">
-    {{readMeterResult | json}}
-  </ion-item>
+<ion-content>
+  <ion-list *ngIf="displayValue && displayType">
+    <ion-item>
+      <ion-label>Показания</ion-label>
+      <ion-note slot="end" color="primary">{{displayValue}}</ion-note>
+    </ion-item>
+    <ion-item>
+      <ion-label>Тип счетчика</ion-label>
+      <ion-note slot="end" color="secondary">{{displayType}}</ion-note>
+    </ion-item>
+  </ion-list>
+  <ion-toolbar>
+    <ion-buttons slot="end">
+      <ion-button (click)="acceptModal()">Подтвердить</ion-button>
+      <ion-button (click)="closeModal()">Закрыть</ion-button>
+    </ion-buttons>
+  </ion-toolbar>
 </ion-content>

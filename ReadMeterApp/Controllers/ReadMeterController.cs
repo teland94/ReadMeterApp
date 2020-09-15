@@ -1,4 +1,7 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
+using System.Linq;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using ReadMeterApp.Exceptions;
@@ -22,25 +25,20 @@ namespace ReadMeterApp.Controllers
         [HttpPost]
         public async Task<IActionResult> Post([FromForm]BlickerPostViewModel model)
         {
-            byte[] imageData;
-
-            using (var binaryReader = new BinaryReader(model.Image.OpenReadStream()))
-            {
-                imageData = binaryReader.ReadBytes((int)model.Image.Length);
-            }
+            var base64Data = Regex.Match(model.Image, @"data:image/(?<type>.+?),(?<data>.+)").Groups["data"].Value;
+            var binData = Convert.FromBase64String(base64Data);
 
             try
             {
-                //var readerData = await BlickerService.Read(imageData);
-                //var meter = readerData.Objects.Meter[0];
-                //return Ok(new ReadMeterResult
-                //{
-                //    DisplayType = meter.DisplayType,
-                //    Messages = meter.Messages,
-                //    MeterCategory = meter.MeterCategory,
-                //    DisplayValue = meter.Objects.Display[0].Value
-                //});
-                return Ok(new ReadMeterResult());
+                var readerData = await BlickerService.Read(binData);
+                var meter = readerData.Objects.Meter.FirstOrDefault();
+                return Ok(new ReadMeterResult
+                {
+                    DisplayType = meter?.DisplayType,
+                    Messages = readerData.Messages,
+                    MeterCategory = meter?.MeterCategory,
+                    DisplayValue = meter?.Objects.Display[0].Value
+                });
             }
             catch (BlickerApiException e)
             {

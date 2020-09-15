@@ -1,5 +1,6 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {ReadMeterResult} from '../models/read-meter-result';
+import {ModalController} from '@ionic/angular';
 
 @Component({
   selector: 'app-blicker-result',
@@ -8,11 +9,20 @@ import {ReadMeterResult} from '../models/read-meter-result';
 })
 export class BlickerResultPage implements OnInit {
 
-  @Input() readMeterResult: ReadMeterResult;
+  @Input() displayValue: ReadMeterResult;
+  @Input() displayType: ReadMeterResult;
 
-  constructor() { }
+  constructor(private readonly modalController: ModalController) { }
 
   ngOnInit() {
+    console.log(this.displayValue, this.displayType);
   }
 
+  acceptModal() {
+    this.modalController.dismiss({ accepted: true });
+  }
+
+  closeModal() {
+    this.modalController.dismiss({ accepted: false });
+  }
 }
