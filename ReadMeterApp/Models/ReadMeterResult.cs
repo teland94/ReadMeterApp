@@ -6,7 +6,7 @@
 
         public string DisplayType { get; set; }
 
-        public object[] Messages { get; set; }
+        public ServiceMessage[] Messages { get; set; }
 
         public string DisplayValue { get; set; }
     }

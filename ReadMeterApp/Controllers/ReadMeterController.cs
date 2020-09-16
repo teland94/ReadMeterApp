@@ -25,12 +25,16 @@ namespace ReadMeterApp.Controllers
         [HttpPost]
         public async Task<IActionResult> Post([FromForm]BlickerPostViewModel model)
         {
-            var base64Data = Regex.Match(model.Image, @"data:image/(?<type>.+?),(?<data>.+)").Groups["data"].Value;
-            var binData = Convert.FromBase64String(base64Data);
+            byte[] imageData;
+
+            using (var binaryReader = new BinaryReader(model.Image.OpenReadStream()))
+            {
+                imageData = binaryReader.ReadBytes((int)model.Image.Length);
+            }
 
             try
             {
-                var readerData = await BlickerService.Read(binData);
+                var readerData = await BlickerService.Read(imageData);
                 var meter = readerData.Objects.Meter.FirstOrDefault();
                 return Ok(new ReadMeterResult
                 {
@@ -41,6 +45,10 @@ namespace ReadMeterApp.Controllers
                 });
             }
             catch (BlickerApiException e)
+            {
+                return StatusCode(400, e.Error);
+            }
+            catch (BlickerApiValidationException e)
             {
                 return StatusCode(422, e.ValidationError);
             }

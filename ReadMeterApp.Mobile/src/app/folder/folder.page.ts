@@ -29,7 +29,7 @@ export class FolderPage implements OnInit {
               private readonly toastService: ToastService) { }
 
   ngOnInit() {
-    this.loadCamera();
+    // this.loadCamera();
   }
 
   loadCamera() {
@@ -37,14 +37,13 @@ export class FolderPage implements OnInit {
       quality: 100,
       sourceType: this.camera.PictureSourceType.CAMERA,
       destinationType : this.camera.DestinationType.DATA_URL,
-      saveToPhotoAlbum: false,
+      saveToPhotoAlbum: false
     };
 
     this.camera.getPicture(options).then((imageData) => {
       this.image = 'data:image/jpeg;base64,' + imageData;
     }, async (err) => {
       console.log(err);
-      await this.toastService.error('Ошибка фотографирования');
     });
   }
 
@@ -62,8 +61,8 @@ export class FolderPage implements OnInit {
   async read() {
     if (!this.image) { return; }
     this.loaderService.showLoader();
-    const readMeterResult = await this.readMeterService.read(this.image);
     try {
+      const readMeterResult = await this.readMeterService.read(this.image);
       this.loaderService.hideLoader();
       this.content = readMeterResult;
       if (readMeterResult.messages && readMeterResult.messages.length > 0) {
@@ -73,28 +72,45 @@ export class FolderPage implements OnInit {
           return;
         }
       }
-      const modal = await this.presentModal(readMeterResult.displayValue, readMeterResult.displayType);
-      const { data: { accepted } } = await modal.onWillDismiss();
-      if (accepted) {
-        await this.sms.send('123', `${'12345'} ${readMeterResult.displayValue}`);
+      const modal = await this.presentModal(readMeterResult.displayValue, readMeterResult.meterCategory);
+      const { data } = await modal.onWillDismiss();
+      if (data && data.accepted) {
+        await this.sendSms('925782930', readMeterResult.displayValue, readMeterResult.meterCategory);
         await this.toastService.success('Показания успешно отправлены');
       }
     } catch (e) {
       console.log(e);
       this.loaderService.hideLoader();
-      await this.toastService.error('Ошибка распознавания');
+      if (e.status === 400) {
+        await this.toastService.error(e.error.detail);
+      }
     }
   }
 
-  async presentModal(displayValue: string, displayType: string) {
+  async presentModal(displayValue: string, meterCategory: string) {
     const modal = await this.modalController.create({
       component: BlickerResultPage,
       componentProps: {
         displayValue,
-        displayType
+        meterCategory
       }
     });
     await modal.present();
     return modal;
+  }
+
+  private async sendSms(personalAccount: string, displayValue: string, meterCategory: string) {
+    let smsNumber;
+    switch (meterCategory) {
+      case 'electricity':
+        smsNumber = 123;
+        break;
+      case 'gas':
+        smsNumber = 456;
+        break;
+    }
+    if (smsNumber) {
+      await this.sms.send(smsNumber, `${personalAccount} ${displayValue}`);
+    }
   }
 }

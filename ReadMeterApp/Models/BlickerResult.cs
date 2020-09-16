@@ -12,7 +12,7 @@ namespace ReadMeterApp.Models
         public string Language { get; set; }
 
         [JsonProperty("messages")]
-        public Message[] Messages { get; set; }
+        public ServiceMessage[] Messages { get; set; }
 
         [JsonProperty("metaData")]
         public MetaData MetaData { get; set; }
@@ -22,6 +22,21 @@ namespace ReadMeterApp.Models
 
         [JsonProperty("requestId")]
         public Guid RequestId { get; set; }
+    }
+
+    public class ServiceMessage
+    {
+        [JsonProperty("code")]
+        public string Code { get; set; }
+
+        [JsonProperty("messageId")]
+        public string MessageId { get; set; }
+
+        [JsonProperty("message")]
+        public string Message { get; set; }
+
+        [JsonProperty("objectId")]
+        public string ObjectId { get; set; }
     }
 
     public class MetaData
@@ -60,7 +75,7 @@ namespace ReadMeterApp.Models
         public string DisplayType { get; set; }
 
         [JsonProperty("messages")]
-        public Message[] Messages { get; set; }
+        public string[] Messages { get; set; }
 
         [JsonProperty("objectId")]
         public string ObjectId { get; set; }
@@ -75,10 +90,28 @@ namespace ReadMeterApp.Models
         public Display[] Display { get; set; }
 
         [JsonProperty("serialNumber")]
-        public object[] SerialNumber { get; set; }
+        public SerialNumber[] SerialNumber { get; set; }
 
         [JsonProperty("barcode")]
         public object[] Barcode { get; set; }
+    }
+
+    public class SerialNumber
+    {
+        [JsonProperty("confidence")]
+        public string Confidence { get; set; }
+
+        [JsonProperty("index")]
+        public long Index { get; set; }
+
+        [JsonProperty("messages")]
+        public string[] Messages { get; set; }
+
+        [JsonProperty("objectId")]
+        public string ObjectId { get; set; }
+
+        [JsonProperty("value")]
+        public string Value { get; set; }
     }
 
     public class Display
@@ -90,27 +123,12 @@ namespace ReadMeterApp.Models
         public long Index { get; set; }
 
         [JsonProperty("messages")]
-        public Message[] Messages { get; set; }
+        public string[] Messages { get; set; }
 
         [JsonProperty("objectId")]
         public string ObjectId { get; set; }
 
         [JsonProperty("value")]
         public string Value { get; set; }
-    }
-
-    public class Message
-    {
-        [JsonProperty("code")]
-        public string Code { get; set; }
-
-        [JsonProperty("messageId")]
-        public string MessageId { get; set; }
-
-        [JsonProperty("message")]
-        public string MessageText { get; set; }
-
-        [JsonProperty("objectId")]
-        public string ObjectId { get; set; }
     }
 }

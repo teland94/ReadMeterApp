@@ -15,21 +15,31 @@
   </ion-header>
 
   <div id="container">
+<!--    <ion-item>-->
+<!--      <ion-label id="image" color="primary">Image</ion-label>-->
+<!--      <ion-input type="file" accept="image/*" (change)="handleFileInput($event.target.files)"></ion-input>-->
+<!--      <ion-button [disabled]="!image" (click)="read()">Прочитать</ion-button>-->
+<!--    </ion-item>-->
     <ion-item>
-      <ion-button (click)="loadCamera()">Сфотографировать</ion-button>
-    </ion-item>
-    <ion-item>
-      <ion-label id="image" color="primary">Image</ion-label>
-      <ion-input type="file" accept="image/*" (change)="handleFileInput($event.target.files)"></ion-input>
+      <ion-button expand="full">
+        <ion-icon lazy="true" slot="start" name="image"></ion-icon>
+        <ion-input type="file" (change)="handleFileInput($event.target.files)" id="file-input"
+                   accept="image/png, image/jpeg"></ion-input>
+      </ion-button>
       <ion-button [disabled]="!image" (click)="read()">Прочитать</ion-button>
     </ion-item>
     <ion-item *ngIf="image">
-      <div style="max-height: 50%; max-width: 50%">
+      <div style="">
         <ion-img [src]="image" alt="image"></ion-img>
       </div>
     </ion-item>
     <ion-item *ngIf="content">
       {{content | json}}
     </ion-item>
+    <ion-fab vertical="bottom" horizontal="center" slot="fixed">
+      <ion-fab-button (click)="loadCamera()">
+        <ion-icon name="camera"></ion-icon>
+      </ion-fab-button>
+    </ion-fab>
   </div>
 </ion-content>

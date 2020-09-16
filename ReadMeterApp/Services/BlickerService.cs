@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
@@ -49,7 +50,14 @@ namespace ReadMeterApp.Services
                 return JsonConvert.DeserializeObject<BlickerResult>(apiResponse);
             }
 
-            throw new BlickerApiException(JsonConvert.DeserializeObject<BlickerValidationError>(apiResponse));
+            throw response.StatusCode switch
+            {
+                HttpStatusCode.UnprocessableEntity => new BlickerApiValidationException(
+                    JsonConvert.DeserializeObject<BlickerApiValidationError>(apiResponse)),
+                HttpStatusCode.BadRequest => new BlickerApiException(
+                    JsonConvert.DeserializeObject<BlickerApiError>(apiResponse)),
+                _ => new InvalidOperationException(apiResponse)
+            };
         }
 
         public async Task<AliveResult> Alive()
@@ -63,7 +71,7 @@ namespace ReadMeterApp.Services
                 return JsonConvert.DeserializeObject<AliveResult>(apiResponse);
             }
 
-            throw new BlickerApiException(JsonConvert.DeserializeObject<BlickerValidationError>(apiResponse));
+            throw new BlickerApiValidationException(JsonConvert.DeserializeObject<BlickerApiValidationError>(apiResponse));
         }
 
 

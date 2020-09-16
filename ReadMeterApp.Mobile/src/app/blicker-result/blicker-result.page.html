@@ -5,14 +5,14 @@
 </ion-header>
 
 <ion-content>
-  <ion-list *ngIf="displayValue && displayType">
+  <ion-list *ngIf="displayValue && meterCategory">
     <ion-item>
       <ion-label>Показания</ion-label>
-      <ion-note slot="end" color="primary">{{displayValue}}</ion-note>
+      <ion-note class="end-note" slot="end" color="primary">{{displayValue}}</ion-note>
     </ion-item>
     <ion-item>
       <ion-label>Тип счетчика</ion-label>
-      <ion-note slot="end" color="secondary">{{displayType}}</ion-note>
+      <ion-note class="end-note" slot="end" color="secondary">{{meterCategory}}</ion-note>
     </ion-item>
   </ion-list>
   <ion-toolbar>

@@ -9,13 +9,13 @@ import {ModalController} from '@ionic/angular';
 })
 export class BlickerResultPage implements OnInit {
 
-  @Input() displayValue: ReadMeterResult;
-  @Input() displayType: ReadMeterResult;
+  @Input() displayValue: string;
+  @Input() meterCategory: string;
 
   constructor(private readonly modalController: ModalController) { }
 
   ngOnInit() {
-    console.log(this.displayValue, this.displayType);
+    console.log(this.displayValue, this.meterCategory);
   }
 
   acceptModal() {

@@ -5,11 +5,11 @@ namespace ReadMeterApp.Exceptions
 {
     public class BlickerApiException : Exception
     {
-        public BlickerApiException(BlickerValidationError validationError)
+        public BlickerApiException(BlickerApiError error)
         {
-            ValidationError = validationError;
+            Error = error;
         }
 
-        public BlickerValidationError ValidationError { get; set; }
+        public BlickerApiError Error { get; set; }
     }
 }

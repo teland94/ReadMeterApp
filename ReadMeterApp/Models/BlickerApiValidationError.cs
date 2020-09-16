@@ -2,7 +2,7 @@
 
 namespace ReadMeterApp.Models
 {
-    public class BlickerValidationError
+    public class BlickerApiValidationError
     {
         [JsonProperty("detail")]
         public Detail[] Detail { get; set; }
