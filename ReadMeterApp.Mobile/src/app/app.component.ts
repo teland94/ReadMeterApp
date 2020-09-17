@@ -4,6 +4,7 @@ import { Platform } from '@ionic/angular';
 import { SplashScreen } from '@ionic-native/splash-screen/ngx';
 import { StatusBar } from '@ionic-native/status-bar/ngx';
 import { AndroidPermissions } from '@ionic-native/android-permissions/ngx';
+import {SettingsService} from './services/settings.service';
 
 @Component({
   selector: 'app-root',
@@ -18,13 +19,19 @@ export class AppComponent implements OnInit {
       url: '/folder',
       icon: 'home'
     },
+    {
+      title: 'Настройки',
+      url: '/settings',
+      icon: 'settings'
+    },
   ];
 
   constructor(
     private platform: Platform,
     private splashScreen: SplashScreen,
     private statusBar: StatusBar,
-    private androidPermissions: AndroidPermissions
+    private androidPermissions: AndroidPermissions,
+    private settingsService: SettingsService
   ) {
     this.initializeApp();
   }
@@ -39,6 +46,7 @@ export class AppComponent implements OnInit {
             this.androidPermissions.PERMISSION.SEND_SMS
           ]
       );
+      this.settingsService.fetch();
     });
   }
 

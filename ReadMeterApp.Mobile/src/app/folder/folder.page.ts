@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnDestroy, OnInit} from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { ReadMeterService } from '../services/read-meter.service';
 import { LoaderService } from '../services/loader.service';
@@ -8,17 +8,24 @@ import { ModalController } from '@ionic/angular';
 import { Camera, CameraOptions } from '@ionic-native/camera/ngx';
 import { SMS } from '@ionic-native/sms/ngx';
 import { ToastService } from '../services/toast.service';
+import { Settings } from '../models/settings.model';
+import { SettingsService } from '../services/settings.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-folder',
   templateUrl: './folder.page.html',
   styleUrls: ['./folder.page.scss'],
 })
-export class FolderPage implements OnInit {
+export class FolderPage implements OnInit, OnDestroy {
+
+  private settingsSubscription: Subscription;
+
   public folder: string;
 
   image: string;
   content: ReadMeterResult;
+  settings: Settings;
 
   constructor(private readonly activatedRoute: ActivatedRoute,
               private readonly readMeterService: ReadMeterService,
@@ -26,10 +33,26 @@ export class FolderPage implements OnInit {
               private readonly loaderService: LoaderService,
               private readonly camera: Camera,
               private readonly sms: SMS,
-              private readonly toastService: ToastService) { }
+              private readonly toastService: ToastService,
+              private readonly settingsService: SettingsService) { }
 
   ngOnInit() {
     // this.loadCamera();
+    this.settingsSubscription = this.settingsService.settings$.subscribe(data => {
+      this.settings = data;
+    });
+  }
+
+  ngOnDestroy() {
+    this.settingsSubscription.unsubscribe();
+  }
+
+  cameraClick() {
+    if (!this.settings || !this.settings.personalAccount) {
+      this.toastService.error('Не установлен лицевой счет');
+      return;
+    }
+    this.loadCamera();
   }
 
   loadCamera() {
@@ -75,7 +98,7 @@ export class FolderPage implements OnInit {
       const modal = await this.presentModal(readMeterResult.displayValue, readMeterResult.meterCategory);
       const { data } = await modal.onWillDismiss();
       if (data && data.accepted) {
-        await this.sendSms('925782930', readMeterResult.displayValue, readMeterResult.meterCategory);
+        await this.sendSms(this.settings.personalAccount, readMeterResult.displayValue, readMeterResult.meterCategory);
         await this.toastService.success('Показания успешно отправлены');
       }
     } catch (e) {

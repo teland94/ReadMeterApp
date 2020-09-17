@@ -14,6 +14,7 @@ import { BlickerResultPage } from './blicker-result/blicker-result.page';
 import { SMS } from '@ionic-native/sms/ngx';
 import { AndroidPermissions } from '@ionic-native/android-permissions/ngx';
 import { Camera } from '@ionic-native/camera/ngx';
+import { NativeStorage } from '@ionic-native/native-storage/ngx';
 
 @NgModule({
   declarations: [AppComponent, BlickerResultPage],
@@ -31,7 +32,8 @@ import { Camera } from '@ionic-native/camera/ngx';
     { provide: HTTP_INTERCEPTORS, useClass: APIInterceptor, multi: true },
     SMS,
     AndroidPermissions,
-    Camera
+    Camera,
+    NativeStorage
   ],
   bootstrap: [AppComponent]
 })
