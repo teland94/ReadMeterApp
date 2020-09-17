@@ -5,6 +5,7 @@ import { SplashScreen } from '@ionic-native/splash-screen/ngx';
 import { StatusBar } from '@ionic-native/status-bar/ngx';
 import { AndroidPermissions } from '@ionic-native/android-permissions/ngx';
 import {SettingsService} from './services/settings.service';
+import {TranslateService} from '@ngx-translate/core';
 
 @Component({
   selector: 'app-root',
@@ -15,14 +16,16 @@ export class AppComponent implements OnInit {
   public selectedIndex = 0;
   public appPages = [
     {
-      title: 'Главная',
+      title: 'Home',
       url: '/folder',
-      icon: 'home'
+      icon: 'home',
+      name: 'MAIN_PAGE'
     },
     {
-      title: 'Настройки',
+      title: 'Settings',
       url: '/settings',
-      icon: 'settings'
+      icon: 'settings',
+      name: 'SETTINGS_PAGE'
     },
   ];
 
@@ -31,7 +34,8 @@ export class AppComponent implements OnInit {
     private splashScreen: SplashScreen,
     private statusBar: StatusBar,
     private androidPermissions: AndroidPermissions,
-    private settingsService: SettingsService
+    private settingsService: SettingsService,
+    private translateService: TranslateService
   ) {
     this.initializeApp();
   }
@@ -46,11 +50,18 @@ export class AppComponent implements OnInit {
             this.androidPermissions.PERMISSION.SEND_SMS
           ]
       );
-      this.settingsService.fetch();
+      this.translateService.setDefaultLang('en');
+      this.translateService.use('ru');
+      const translationKeys = this.appPages.map(page => `SIDEBAR.${page.name}_TITLE`);
+      this.translateService.get(translationKeys).subscribe(data => {
+        this.appPages.forEach(page => {
+          page.title = data[`SIDEBAR.${page.name}_TITLE`];
+        });
+      });
     });
   }
 
-  ngOnInit() {
+  async ngOnInit() {
     const path = window.location.pathname.split('folder/')[1];
     if (path !== undefined) {
       this.selectedIndex = this.appPages.findIndex(page => page.title.toLowerCase() === path.toLowerCase());
@@ -58,5 +69,6 @@ export class AppComponent implements OnInit {
     this.platform.backButton.subscribe(() => {
       navigator['app'].exitApp();
     });
+    await this.settingsService.fetch();
   }
 }

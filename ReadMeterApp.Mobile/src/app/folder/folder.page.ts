@@ -1,16 +1,17 @@
-import {Component, OnDestroy, OnInit} from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { ReadMeterService } from '../services/read-meter.service';
 import { LoaderService } from '../services/loader.service';
 import { ReadMeterResult } from '../models/read-meter-result';
 import { BlickerResultPage } from '../blicker-result/blicker-result.page';
-import { ModalController } from '@ionic/angular';
+import { ModalController, Platform } from '@ionic/angular';
 import { Camera, CameraOptions } from '@ionic-native/camera/ngx';
 import { SMS } from '@ionic-native/sms/ngx';
 import { ToastService } from '../services/toast.service';
 import { Settings } from '../models/settings.model';
 import { SettingsService } from '../services/settings.service';
 import { Subscription } from 'rxjs';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-folder',
@@ -23,6 +24,7 @@ export class FolderPage implements OnInit, OnDestroy {
 
   public folder: string;
 
+  file: File;
   image: string;
   content: ReadMeterResult;
   settings: Settings;
@@ -34,10 +36,11 @@ export class FolderPage implements OnInit, OnDestroy {
               private readonly camera: Camera,
               private readonly sms: SMS,
               private readonly toastService: ToastService,
-              private readonly settingsService: SettingsService) { }
+              private readonly settingsService: SettingsService,
+              private readonly platform: Platform,
+              private readonly translateService: TranslateService) { }
 
   ngOnInit() {
-    // this.loadCamera();
     this.settingsSubscription = this.settingsService.settings$.subscribe(data => {
       this.settings = data;
     });
@@ -47,37 +50,26 @@ export class FolderPage implements OnInit, OnDestroy {
     this.settingsSubscription.unsubscribe();
   }
 
-  cameraClick() {
+  get isCordova() {
+    return this.platform.is('cordova');
+  }
+
+  async cameraClick() {
     if (!this.settings || !this.settings.personalAccount) {
-      this.toastService.error('Не установлен лицевой счет');
+      await this.toastService.error(this.translateService.instant('MESSAGES.PERSONAL_ACCOUNT_NOT_SET_ERROR'));
       return;
     }
     this.loadCamera();
   }
 
-  loadCamera() {
-    const options: CameraOptions = {
-      quality: 100,
-      sourceType: this.camera.PictureSourceType.CAMERA,
-      destinationType : this.camera.DestinationType.DATA_URL,
-      saveToPhotoAlbum: false
-    };
-
-    this.camera.getPicture(options).then((imageData) => {
-      this.image = 'data:image/jpeg;base64,' + imageData;
-    }, async (err) => {
-      console.log(err);
-    });
-  }
-
   handleFileInput(files: FileList) {
-    const file = files.item(0);
+    this.file = files.item(0);
     const reader = new FileReader();
     reader.addEventListener('load', () => {
       this.image = reader.result.toString();
     }, false);
-    if (file) {
-      reader.readAsDataURL(file);
+    if (this.file) {
+      reader.readAsDataURL(this.file);
     }
   }
 
@@ -91,7 +83,7 @@ export class FolderPage implements OnInit, OnDestroy {
       if (readMeterResult.messages && readMeterResult.messages.length > 0) {
         const { code } = readMeterResult.messages[0];
         if (code === 'no_meter') {
-          await this.toastService.error('Счетчик не обнаружен');
+          await this.toastService.error(this.translateService.instant('MESSAGES.NO_METER_ERROR'));
           return;
         }
       }
@@ -99,7 +91,7 @@ export class FolderPage implements OnInit, OnDestroy {
       const { data } = await modal.onWillDismiss();
       if (data && data.accepted) {
         await this.sendSms(this.settings.personalAccount, readMeterResult.displayValue, readMeterResult.meterCategory);
-        await this.toastService.success('Показания успешно отправлены');
+        await this.toastService.success(this.translateService.instant('MESSAGES.METER_READING_SENT_SUCCESS'));
       }
     } catch (e) {
       console.log(e);
@@ -108,6 +100,21 @@ export class FolderPage implements OnInit, OnDestroy {
         await this.toastService.error(e.error.detail);
       }
     }
+  }
+
+  private loadCamera() {
+    const options: CameraOptions = {
+      quality: 100,
+      sourceType: this.camera.PictureSourceType.CAMERA,
+      destinationType : this.camera.DestinationType.DATA_URL,
+      saveToPhotoAlbum: false
+    };
+
+    this.camera.getPicture(options).then((imageData) => {
+      this.image = 'data:image/jpeg;base64,' + imageData;
+    }, async (err) => {
+      console.log(err);
+    });
   }
 
   async presentModal(displayValue: string, meterCategory: string) {

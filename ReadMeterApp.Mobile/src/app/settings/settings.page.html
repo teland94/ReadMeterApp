@@ -1,12 +1,16 @@
 <ion-header>
   <ion-toolbar>
-    <ion-title>Настройки</ion-title>
+    <ion-buttons slot="start">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+    <ion-title>{{'SETTINGS_PAGE.TITLE' | translate}}</ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content>
   <ion-item>
-    <ion-label>Лицевой счет</ion-label>
-    <ion-input type="text" [(ngModel)]="settings.personalAccount" name="personalAccount"></ion-input>
+    <ion-label>{{'SETTINGS_PAGE.PERSONAL_ACCOUNT_INPUT_LABEL' | translate}}</ion-label>
+    <ion-input type="text" [placeholder]="'SETTINGS_PAGE.PERSONAL_ACCOUNT_INPUT_PLACEHOLDER' | translate"
+               [(ngModel)]="settings.personalAccount" name="personalAccount"></ion-input>
   </ion-item>
 </ion-content>

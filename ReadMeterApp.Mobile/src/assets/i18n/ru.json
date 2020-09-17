@@ -1,0 +1,22 @@
+{
+  "SIDEBAR": {
+    "MAIN_PAGE_TITLE": "Главная",
+    "SETTINGS_PAGE_TITLE": "Настройки"
+  },
+  "MAIN_PAGE": {
+    "TITLE": "Главная",
+    "CHOOSE_FILE_BUTTON": "Выберите файл",
+    "READ_BUTTON": "Прочитать",
+    "TAKE_PHOTO_HINT": "Пожалуйста, сфотографируйте показания вашего счетчика"
+  },
+  "SETTINGS_PAGE": {
+    "TITLE": "Настройки",
+    "PERSONAL_ACCOUNT_INPUT_LABEL": "Лицевой Счет",
+    "PERSONAL_ACCOUNT_INPUT_PLACEHOLDER": "Введите ваш лицевой счет"
+  },
+  "MESSAGES": {
+    "NO_METER_ERROR": "Счетчик не найден",
+    "METER_READING_SENT_SUCCESS": "Показания счетчика успешно отправлены",
+    "PERSONAL_ACCOUNT_NOT_SET_ERROR": "Не задан лицевой счет"
+  }
+}

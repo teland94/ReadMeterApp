@@ -23,6 +23,7 @@ export class SettingsService {
   }
 
   async fetch(): Promise<Settings> {
-    return JSON.parse(await this.storageService.getItem('settings'));
+    const settingsStr = await this.storageService.getItem('settings');
+    return JSON.parse(settingsStr);
   }
 }

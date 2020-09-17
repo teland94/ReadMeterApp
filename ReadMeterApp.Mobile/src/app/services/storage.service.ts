@@ -12,14 +12,18 @@ export class StorageService {
   constructor(private readonly nativeStorage: NativeStorage,
               private readonly platform: Platform) {
     if (this.platform.is('cordova')) {
-      this.nativeStorage = nativeStorage;
+      this.storage = localStorage;
     } else {
       this.storage = localStorage;
     }
   }
 
   async getItem(key: string) {
-    return await this.nativeStorage.getItem(key);
+    try {
+      return await this.storage.getItem(key);
+    } catch (e) {
+      alert(e);
+    }
   }
 
   async setItem(key: string, value: any) {
