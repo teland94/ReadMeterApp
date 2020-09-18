@@ -18,6 +18,7 @@ export class SettingsPage implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.settingsSubscription = this.settingsService.settings$.subscribe(data => {
+      if (!data) { return; }
       this.settings = data;
     });
   }

@@ -1,13 +1,18 @@
 {
   "SIDEBAR": {
-    "MAIN_PAGE_TITLE": "Главная",
+    "HOME_PAGE_TITLE": "Главная",
     "SETTINGS_PAGE_TITLE": "Настройки"
   },
-  "MAIN_PAGE": {
+  "HOME_PAGE": {
     "TITLE": "Главная",
     "CHOOSE_FILE_BUTTON": "Выберите файл",
     "READ_BUTTON": "Прочитать",
-    "TAKE_PHOTO_HINT": "Пожалуйста, сфотографируйте показания вашего счетчика"
+    "TAKE_PHOTO_HINT": "Пожалуйста, сфотографируйте показания вашего счетчика."
+  },
+  "RESULT_PAGE": {
+    "TITLE": "Результат",
+    "METER_READING_LABEL": "Показания",
+    "METER_CATEGORY_LABEL": "Категория счетчика"
   },
   "SETTINGS_PAGE": {
     "TITLE": "Настройки",
@@ -18,5 +23,9 @@
     "NO_METER_ERROR": "Счетчик не найден",
     "METER_READING_SENT_SUCCESS": "Показания счетчика успешно отправлены",
     "PERSONAL_ACCOUNT_NOT_SET_ERROR": "Не задан лицевой счет"
+  },
+  "BUTTONS": {
+    "CONFIRM": "Подтвердить",
+    "CANCEL": "Отмена"
   }
 }

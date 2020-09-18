@@ -14,12 +14,13 @@ import { Subscription } from 'rxjs';
 import { TranslateService } from '@ngx-translate/core';
 
 @Component({
-  selector: 'app-folder',
-  templateUrl: './folder.page.html',
-  styleUrls: ['./folder.page.scss'],
+  selector: 'app-home',
+  templateUrl: './home.page.html',
+  styleUrls: ['./home.page.scss'],
 })
-export class FolderPage implements OnInit, OnDestroy {
+export class HomePage implements OnInit, OnDestroy {
 
+  private backButtonSubscription: Subscription;
   private settingsSubscription: Subscription;
 
   public folder: string;
@@ -41,12 +42,16 @@ export class FolderPage implements OnInit, OnDestroy {
               private readonly translateService: TranslateService) { }
 
   ngOnInit() {
+    this.backButtonSubscription = this.platform.backButton.subscribe(() => {
+      navigator['app'].exitApp();
+    });
     this.settingsSubscription = this.settingsService.settings$.subscribe(data => {
       this.settings = data;
     });
   }
 
   ngOnDestroy() {
+    this.backButtonSubscription.unsubscribe();
     this.settingsSubscription.unsubscribe();
   }
 
@@ -59,21 +64,31 @@ export class FolderPage implements OnInit, OnDestroy {
       await this.toastService.error(this.translateService.instant('MESSAGES.PERSONAL_ACCOUNT_NOT_SET_ERROR'));
       return;
     }
-    this.loadCamera();
+    await this.loadCameraImage();
+    await this.read();
+  }
+
+  async readClick() {
+    if (!this.settings || !this.settings.personalAccount) {
+      await this.toastService.error(this.translateService.instant('MESSAGES.PERSONAL_ACCOUNT_NOT_SET_ERROR'));
+      return;
+    }
+    await this.read();
   }
 
   handleFileInput(files: FileList) {
-    this.file = files.item(0);
+    const file = files.item(0);
     const reader = new FileReader();
     reader.addEventListener('load', () => {
       this.image = reader.result.toString();
     }, false);
-    if (this.file) {
+    if (file) {
+      this.file = file;
       reader.readAsDataURL(this.file);
     }
   }
 
-  async read() {
+  private async read() {
     if (!this.image) { return; }
     this.loaderService.showLoader();
     try {
@@ -89,7 +104,7 @@ export class FolderPage implements OnInit, OnDestroy {
       }
       const modal = await this.presentModal(readMeterResult.displayValue, readMeterResult.meterCategory);
       const { data } = await modal.onWillDismiss();
-      if (data && data.accepted) {
+      if (data && data.confirmed) {
         await this.sendSms(this.settings.personalAccount, readMeterResult.displayValue, readMeterResult.meterCategory);
         await this.toastService.success(this.translateService.instant('MESSAGES.METER_READING_SENT_SUCCESS'));
       }
@@ -102,19 +117,15 @@ export class FolderPage implements OnInit, OnDestroy {
     }
   }
 
-  private loadCamera() {
+  private async loadCameraImage() {
     const options: CameraOptions = {
       quality: 100,
       sourceType: this.camera.PictureSourceType.CAMERA,
       destinationType : this.camera.DestinationType.DATA_URL,
       saveToPhotoAlbum: false
     };
-
-    this.camera.getPicture(options).then((imageData) => {
-      this.image = 'data:image/jpeg;base64,' + imageData;
-    }, async (err) => {
-      console.log(err);
-    });
+    const imageData = await this.camera.getPicture(options);
+    this.image = 'data:image/jpeg;base64,' + imageData;
   }
 
   async presentModal(displayValue: string, meterCategory: string) {

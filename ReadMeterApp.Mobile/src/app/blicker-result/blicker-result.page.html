@@ -1,24 +1,24 @@
 <ion-header>
   <ion-toolbar>
-    <ion-title>Результат</ion-title>
+    <ion-title>{{'RESULT_PAGE.TITLE' | translate}}</ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content>
   <ion-list *ngIf="displayValue && meterCategory">
     <ion-item>
-      <ion-label>Показания</ion-label>
+      <ion-label>{{'RESULT_PAGE.METER_READING_LABEL' | translate}}</ion-label>
       <ion-note class="end-note" slot="end" color="primary">{{displayValue}}</ion-note>
     </ion-item>
     <ion-item>
-      <ion-label>Тип счетчика</ion-label>
+      <ion-label>{{'RESULT_PAGE.METER_CATEGORY_LABEL' | translate}}</ion-label>
       <ion-note class="end-note" slot="end" color="secondary">{{meterCategory}}</ion-note>
     </ion-item>
   </ion-list>
   <ion-toolbar>
     <ion-buttons slot="end">
-      <ion-button (click)="acceptModal()">Подтвердить</ion-button>
-      <ion-button (click)="closeModal()">Закрыть</ion-button>
+      <ion-button (click)="confirmModal()">{{'BUTTONS.CONFIRM' | translate}}</ion-button>
+      <ion-button (click)="cancelModal()">{{'BUTTONS.CANCEL' | translate}}</ion-button>
     </ion-buttons>
   </ion-toolbar>
 </ion-content>

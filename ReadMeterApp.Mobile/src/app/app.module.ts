@@ -14,9 +14,9 @@ import { BlickerResultPage } from './blicker-result/blicker-result.page';
 import { SMS } from '@ionic-native/sms/ngx';
 import { AndroidPermissions } from '@ionic-native/android-permissions/ngx';
 import { Camera } from '@ionic-native/camera/ngx';
-import { NativeStorage } from '@ionic-native/native-storage/ngx';
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
+import { IonicStorageModule } from '@ionic/storage';
 
 export function createTranslateLoader(backend: HttpBackend) {
   const httpClient = new HttpClient(backend);
@@ -37,7 +37,8 @@ export function createTranslateLoader(backend: HttpBackend) {
         useFactory: (createTranslateLoader),
         deps: [HttpBackend]
       }
-    })
+    }),
+    IonicStorageModule.forRoot()
   ],
   providers: [
     StatusBar,
@@ -46,8 +47,7 @@ export function createTranslateLoader(backend: HttpBackend) {
     { provide: HTTP_INTERCEPTORS, useClass: APIInterceptor, multi: true },
     SMS,
     AndroidPermissions,
-    Camera,
-    NativeStorage
+    Camera
   ],
   bootstrap: [AppComponent]
 })

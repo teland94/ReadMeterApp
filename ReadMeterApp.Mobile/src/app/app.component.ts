@@ -4,8 +4,8 @@ import { Platform } from '@ionic/angular';
 import { SplashScreen } from '@ionic-native/splash-screen/ngx';
 import { StatusBar } from '@ionic-native/status-bar/ngx';
 import { AndroidPermissions } from '@ionic-native/android-permissions/ngx';
-import {SettingsService} from './services/settings.service';
-import {TranslateService} from '@ngx-translate/core';
+import { SettingsService } from './services/settings.service';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-root',
@@ -17,9 +17,9 @@ export class AppComponent implements OnInit {
   public appPages = [
     {
       title: 'Home',
-      url: '/folder',
+      url: '/home',
       icon: 'home',
-      name: 'MAIN_PAGE'
+      name: 'HOME_PAGE'
     },
     {
       title: 'Settings',
@@ -62,13 +62,12 @@ export class AppComponent implements OnInit {
   }
 
   async ngOnInit() {
-    const path = window.location.pathname.split('folder/')[1];
+    const path = window.location.pathname.split('/')[1];
     if (path !== undefined) {
-      this.selectedIndex = this.appPages.findIndex(page => page.title.toLowerCase() === path.toLowerCase());
+      const pageIndex = this.appPages.findIndex(
+          page => page.name.replace('_PAGE', '').toLowerCase() === path.toLowerCase());
+      this.selectedIndex = pageIndex > -1 ? pageIndex : 0;
     }
-    this.platform.backButton.subscribe(() => {
-      navigator['app'].exitApp();
-    });
     await this.settingsService.fetch();
   }
 }

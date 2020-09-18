@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, ReplaySubject } from 'rxjs';
+import { ReplaySubject } from 'rxjs';
 import { Settings } from '../models/settings.model';
-import { StorageService } from './storage.service';
+import { Storage } from '@ionic/storage';
 
 @Injectable({
   providedIn: 'root'
@@ -11,19 +11,18 @@ export class SettingsService {
   private _settings = new ReplaySubject<Settings>(1);
   readonly settings$ = this._settings.asObservable();
 
-  constructor(private storageService: StorageService) { }
+  constructor(private storage: Storage) { }
 
   set settings(val: Settings) {
     this._settings.next(val);
   }
 
   async save(settings: Settings) {
-    await this.storageService.setItem('settings', JSON.stringify(settings));
+    await this.storage.set('settings', settings);
     this.settings = { ...settings };
   }
 
-  async fetch(): Promise<Settings> {
-    const settingsStr = await this.storageService.getItem('settings');
-    return JSON.parse(settingsStr);
+  async fetch() {
+    this.settings = await this.storage.get('settings');
   }
 }

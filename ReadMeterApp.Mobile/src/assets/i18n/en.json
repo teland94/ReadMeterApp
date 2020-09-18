@@ -1,13 +1,18 @@
 {
   "SIDEBAR": {
-    "MAIN_PAGE_TITLE": "Home",
+    "HOME_PAGE_TITLE": "Home",
     "SETTINGS_PAGE_TITLE": "Settings"
   },
-  "MAIN_PAGE": {
+  "HOME_PAGE": {
     "TITLE": "Home",
     "CHOOSE_FILE_BUTTON": "Choose file",
     "READ_BUTTON": "Read",
-    "TAKE_PHOTO_HINT": "Please take a photo of your meter reading"
+    "TAKE_PHOTO_HINT": "Please take a photo of your meter reading."
+  },
+  "RESULT_PAGE": {
+    "TITLE": "Result",
+    "METER_READING_LABEL": "Meter reading",
+    "METER_CATEGORY_LABEL": "Meter category"
   },
   "SETTINGS_PAGE": {
     "TITLE": "Settings",
@@ -18,5 +23,9 @@
     "NO_METER_ERROR": "No meter found",
     "METER_READING_SENT_SUCCESS": "Meter reading sent",
     "PERSONAL_ACCOUNT_NOT_SET_ERROR": "Personal account not set"
+  },
+  "BUTTONS": {
+    "CONFIRM": "Confirm",
+    "CANCEL": "Cancel"
   }
 }

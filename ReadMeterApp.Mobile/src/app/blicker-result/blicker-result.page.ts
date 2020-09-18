@@ -1,5 +1,4 @@
 import {Component, Input, OnInit} from '@angular/core';
-import {ReadMeterResult} from '../models/read-meter-result';
 import {ModalController} from '@ionic/angular';
 
 @Component({
@@ -18,11 +17,11 @@ export class BlickerResultPage implements OnInit {
     console.log(this.displayValue, this.meterCategory);
   }
 
-  acceptModal() {
-    this.modalController.dismiss({ accepted: true });
+  confirmModal() {
+    this.modalController.dismiss({ confirmed: true });
   }
 
-  closeModal() {
-    this.modalController.dismiss({ accepted: false });
+  cancelModal() {
+    this.modalController.dismiss({ confirmed: false });
   }
 }
