@@ -7,6 +7,7 @@
     "TITLE": "Главная",
     "CHOOSE_FILE_BUTTON": "Выберите файл",
     "READ_BUTTON": "Прочитать",
+    "SEND_BUTTON": "Отправить",
     "TAKE_PHOTO_HINT": "Пожалуйста, сфотографируйте показания вашего счетчика."
   },
   "RESULT_PAGE": {
@@ -22,7 +23,10 @@
   "MESSAGES": {
     "NO_METER_ERROR": "Счетчик не найден",
     "METER_READING_SENT_SUCCESS": "Показания счетчика успешно отправлены",
-    "PERSONAL_ACCOUNT_NOT_SET_ERROR": "Не задан лицевой счет"
+    "METER_READING_SENT_ERROR": "Ошибка отправки показаний счетчика",
+    "PERSONAL_ACCOUNT_NOT_SET_ERROR": "Не задан лицевой счет",
+    "PLEASE_WAIT": "Пожалуйста, подождите...",
+    "UNREAD_ERROR": "Непрочитанные показания счетчика"
   },
   "BUTTONS": {
     "CONFIRM": "Подтвердить",

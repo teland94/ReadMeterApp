@@ -27,7 +27,7 @@ export class HomePage implements OnInit, OnDestroy {
 
   file: File;
   image: string;
-  content: ReadMeterResult;
+  result: ReadMeterResult;
   settings: Settings;
 
   constructor(private readonly activatedRoute: ActivatedRoute,
@@ -76,6 +76,17 @@ export class HomePage implements OnInit, OnDestroy {
     await this.read();
   }
 
+  async sendSmsClick() {
+    if (!this.result) { return; }
+    try {
+      await this.sendSms(this.settings.personalAccount, this.result.displayValue, this.result.meterCategory);
+      await this.toastService.success(this.translateService.instant('MESSAGES.METER_READING_SENT_SUCCESS'));
+    } catch (e) {
+      console.log(e);
+      await this.toastService.error(this.translateService.instant('MESSAGES.METER_READING_SENT_ERROR'));
+    }
+  }
+
   handleFileInput(files: FileList) {
     const file = files.item(0);
     const reader = new FileReader();
@@ -94,7 +105,7 @@ export class HomePage implements OnInit, OnDestroy {
     try {
       const readMeterResult = await this.readMeterService.read(this.image);
       this.loaderService.hideLoader();
-      this.content = readMeterResult;
+      this.result = readMeterResult;
       if (readMeterResult.messages && readMeterResult.messages.length > 0) {
         const { code } = readMeterResult.messages[0];
         if (code === 'no_meter') {
@@ -102,11 +113,20 @@ export class HomePage implements OnInit, OnDestroy {
           return;
         }
       }
+      if (!readMeterResult.displayValue) {
+        await this.toastService.error(this.translateService.instant('MESSAGES.UNREAD_ERROR'));
+        return;
+      }
       const modal = await this.presentModal(readMeterResult.displayValue, readMeterResult.meterCategory);
       const { data } = await modal.onWillDismiss();
       if (data && data.confirmed) {
-        await this.sendSms(this.settings.personalAccount, readMeterResult.displayValue, readMeterResult.meterCategory);
-        await this.toastService.success(this.translateService.instant('MESSAGES.METER_READING_SENT_SUCCESS'));
+        try {
+          await this.sendSms(this.settings.personalAccount, readMeterResult.displayValue, readMeterResult.meterCategory);
+          await this.toastService.success(this.translateService.instant('MESSAGES.METER_READING_SENT_SUCCESS'));
+        } catch (e) {
+          console.log(e);
+          await this.toastService.error(this.translateService.instant('MESSAGES.METER_READING_SENT_ERROR'));
+        }
       }
     } catch (e) {
       console.log(e);
@@ -144,10 +164,10 @@ export class HomePage implements OnInit, OnDestroy {
     let smsNumber;
     switch (meterCategory) {
       case 'electricity':
-        smsNumber = 123;
+        smsNumber = '123';
         break;
       case 'gas':
-        smsNumber = 456;
+        smsNumber = '456';
         break;
     }
     if (smsNumber) {

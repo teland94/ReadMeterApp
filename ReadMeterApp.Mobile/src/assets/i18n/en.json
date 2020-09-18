@@ -7,6 +7,7 @@
     "TITLE": "Home",
     "CHOOSE_FILE_BUTTON": "Choose file",
     "READ_BUTTON": "Read",
+    "SEND_BUTTON": "Send",
     "TAKE_PHOTO_HINT": "Please take a photo of your meter reading."
   },
   "RESULT_PAGE": {
@@ -22,7 +23,10 @@
   "MESSAGES": {
     "NO_METER_ERROR": "No meter found",
     "METER_READING_SENT_SUCCESS": "Meter reading sent",
-    "PERSONAL_ACCOUNT_NOT_SET_ERROR": "Personal account not set"
+    "METER_READING_SENT_ERROR": "Meter reading sending error",
+    "PERSONAL_ACCOUNT_NOT_SET_ERROR": "Personal account not set",
+    "PLEASE_WAIT": "Please wait...",
+    "UNREAD_ERROR": "Unread meter reading"
   },
   "BUTTONS": {
     "CONFIRM": "Confirm",
