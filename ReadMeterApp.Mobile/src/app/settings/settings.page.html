@@ -9,8 +9,8 @@
 
 <ion-content>
   <ion-item>
-    <ion-label>{{'SETTINGS_PAGE.PERSONAL_ACCOUNT_INPUT_LABEL' | translate}}</ion-label>
-    <ion-input type="text" [placeholder]="'SETTINGS_PAGE.PERSONAL_ACCOUNT_INPUT_PLACEHOLDER' | translate"
+    <ion-label position="stacked">{{'SETTINGS_PAGE.PERSONAL_ACCOUNT_INPUT_LABEL' | translate}}</ion-label>
+    <ion-input type="numeric" [placeholder]="'SETTINGS_PAGE.PERSONAL_ACCOUNT_INPUT_PLACEHOLDER' | translate"
                [(ngModel)]="settings.personalAccount" name="personalAccount"></ion-input>
   </ion-item>
 </ion-content>

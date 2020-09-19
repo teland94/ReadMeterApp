@@ -16,7 +16,7 @@ import { AndroidPermissions } from '@ionic-native/android-permissions/ngx';
 import { Camera } from '@ionic-native/camera/ngx';
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
-import { IonicStorageModule } from '@ionic/storage';
+import { FormsModule } from '@angular/forms';
 
 export function createTranslateLoader(backend: HttpBackend) {
   const httpClient = new HttpClient(backend);
@@ -26,20 +26,20 @@ export function createTranslateLoader(backend: HttpBackend) {
 @NgModule({
   declarations: [AppComponent, BlickerResultPage],
   entryComponents: [],
-  imports: [
-    BrowserModule,
-    IonicModule.forRoot(),
-    AppRoutingModule,
-    HttpClientModule,
-    TranslateModule.forRoot({
-      loader: {
-        provide: TranslateLoader,
-        useFactory: (createTranslateLoader),
-        deps: [HttpBackend]
-      }
-    }),
-    IonicStorageModule.forRoot()
-  ],
+    imports: [
+        BrowserModule,
+        IonicModule.forRoot(),
+        AppRoutingModule,
+        HttpClientModule,
+        TranslateModule.forRoot({
+            loader: {
+                provide: TranslateLoader,
+                useFactory: (createTranslateLoader),
+                deps: [HttpBackend]
+            }
+        }),
+        FormsModule
+    ],
   providers: [
     StatusBar,
     SplashScreen,

@@ -10,7 +10,7 @@ namespace ReadMeterApp.Services
 {
     public interface IBlickerService
     {
-        Task<BlickerResult> Read(byte[] image);
+        Task<BlickerResult> Read(byte[] image, string language);
 
         Task<AliveResult> Alive();
     }
@@ -25,7 +25,7 @@ namespace ReadMeterApp.Services
             _httpClient.DefaultRequestHeaders.Add("subscription-key", "84fa0c01037b4b48b38e5a2582aaafc9");
         }
 
-        public async Task<BlickerResult> Read(byte[] image)
+        public async Task<BlickerResult> Read(byte[] image, string language)
         {
             using var content = new MultipartFormDataContent
             {
@@ -35,12 +35,15 @@ namespace ReadMeterApp.Services
                 { new StringContent(string.Empty), "referenceId" },
                 { new StringContent(string.Empty), "meterCategory" },
                 { new StringContent(string.Empty), "displayType" },
-                { new StringContent(string.Empty), "language" },
                 { new StringContent(string.Empty), "nDigits" },
                 { new StringContent(string.Empty), "nDisplays" },
                 { new StringContent(string.Empty), "GPSLocation" },
                 { new StringContent(string.Empty), "datetime" }
             };
+            if (language != null)
+            {
+                content.Add(new StringContent(language), "language");
+            }
 
             using var response = await _httpClient.PostAsync("/blicker/2020-05-01", content);
             var apiResponse = await response.Content.ReadAsStringAsync();

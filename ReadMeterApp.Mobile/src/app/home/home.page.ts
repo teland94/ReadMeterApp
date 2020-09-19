@@ -2,7 +2,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { ReadMeterService } from '../services/read-meter.service';
 import { LoaderService } from '../services/loader.service';
-import { ReadMeterResult } from '../models/read-meter-result';
+import {MeterCategory, ReadMeterResult} from '../models/read-meter-result';
 import { BlickerResultPage } from '../blicker-result/blicker-result.page';
 import { ModalController, Platform } from '@ionic/angular';
 import { Camera, CameraOptions } from '@ionic-native/camera/ngx';
@@ -20,7 +20,6 @@ import { TranslateService } from '@ngx-translate/core';
 })
 export class HomePage implements OnInit, OnDestroy {
 
-  private backButtonSubscription: Subscription;
   private settingsSubscription: Subscription;
 
   public folder: string;
@@ -42,16 +41,12 @@ export class HomePage implements OnInit, OnDestroy {
               private readonly translateService: TranslateService) { }
 
   ngOnInit() {
-    this.backButtonSubscription = this.platform.backButton.subscribe(() => {
-      navigator['app'].exitApp();
-    });
     this.settingsSubscription = this.settingsService.settings$.subscribe(data => {
       this.settings = data;
     });
   }
 
   ngOnDestroy() {
-    this.backButtonSubscription.unsubscribe();
     this.settingsSubscription.unsubscribe();
   }
 
@@ -105,23 +100,15 @@ export class HomePage implements OnInit, OnDestroy {
     try {
       const readMeterResult = await this.readMeterService.read(this.image);
       this.loaderService.hideLoader();
-      this.result = readMeterResult;
-      if (readMeterResult.messages && readMeterResult.messages.length > 0) {
-        const { code } = readMeterResult.messages[0];
-        if (code === 'no_meter') {
-          await this.toastService.error(this.translateService.instant('MESSAGES.NO_METER_ERROR'));
-          return;
-        }
-      }
-      if (!readMeterResult.displayValue) {
-        await this.toastService.error(this.translateService.instant('MESSAGES.UNREAD_ERROR'));
-        return;
-      }
-      const modal = await this.presentModal(readMeterResult.displayValue, readMeterResult.meterCategory);
+      if (!await this.checkReadMeterResult(readMeterResult)) { return; }
+      const readMeterViewResult = { ...readMeterResult };
+      readMeterViewResult.displayValue = readMeterViewResult.displayValue.split('.')[0];
+      this.result = readMeterViewResult;
+      const modal = await this.presentModal(readMeterViewResult.displayValue, readMeterViewResult.meterCategory);
       const { data } = await modal.onWillDismiss();
       if (data && data.confirmed) {
         try {
-          await this.sendSms(this.settings.personalAccount, readMeterResult.displayValue, readMeterResult.meterCategory);
+          await this.sendSms(this.settings.personalAccount, readMeterViewResult.displayValue, readMeterViewResult.meterCategory);
           await this.toastService.success(this.translateService.instant('MESSAGES.METER_READING_SENT_SUCCESS'));
         } catch (e) {
           console.log(e);
@@ -137,18 +124,34 @@ export class HomePage implements OnInit, OnDestroy {
     }
   }
 
+  private async checkReadMeterResult(readMeterResult: ReadMeterResult) {
+    if (readMeterResult.messages && readMeterResult.messages.length > 0) {
+      const { code } = readMeterResult.messages[0];
+      if (code === 'no_meter') {
+        await this.toastService.error(this.translateService.instant('MESSAGES.NO_METER_ERROR'));
+        return false;
+      }
+    }
+    if (!readMeterResult.displayValue) {
+      await this.toastService.error(this.translateService.instant('MESSAGES.UNREAD_METER_READING_ERROR'));
+      return false;
+    }
+    return true;
+  }
+
   private async loadCameraImage() {
     const options: CameraOptions = {
       quality: 100,
       sourceType: this.camera.PictureSourceType.CAMERA,
       destinationType : this.camera.DestinationType.DATA_URL,
+      correctOrientation: true,
       saveToPhotoAlbum: false
     };
     const imageData = await this.camera.getPicture(options);
     this.image = 'data:image/jpeg;base64,' + imageData;
   }
 
-  async presentModal(displayValue: string, meterCategory: string) {
+  private async presentModal(displayValue: string, meterCategory: string) {
     const modal = await this.modalController.create({
       component: BlickerResultPage,
       componentProps: {
@@ -160,13 +163,13 @@ export class HomePage implements OnInit, OnDestroy {
     return modal;
   }
 
-  private async sendSms(personalAccount: string, displayValue: string, meterCategory: string) {
+  private async sendSms(personalAccount: string, displayValue: string, meterCategory: MeterCategory) {
     let smsNumber;
     switch (meterCategory) {
-      case 'electricity':
+      case MeterCategory.Electricity:
         smsNumber = '123';
         break;
-      case 'gas':
+      case MeterCategory.Gas:
         smsNumber = '456';
         break;
     }

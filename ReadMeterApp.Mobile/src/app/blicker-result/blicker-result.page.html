@@ -5,16 +5,19 @@
 </ion-header>
 
 <ion-content>
-  <ion-list *ngIf="displayValue && meterCategory">
-    <ion-item>
-      <ion-label>{{'RESULT_PAGE.METER_READING_LABEL' | translate}}</ion-label>
-      <ion-note class="end-note" slot="end" color="primary">{{displayValue}}</ion-note>
-    </ion-item>
-    <ion-item>
-      <ion-label>{{'RESULT_PAGE.METER_CATEGORY_LABEL' | translate}}</ion-label>
-      <ion-note class="end-note" slot="end" color="secondary">{{meterCategory}}</ion-note>
-    </ion-item>
-  </ion-list>
+  <ion-item>
+    <ion-label position="stacked">{{'RESULT_PAGE.METER_READING_LABEL' | translate}}</ion-label>
+    <ion-input color="primary" [(ngModel)]="displayValue"></ion-input>
+  </ion-item>
+  <ion-item>
+    <ion-label position="stacked">{{'RESULT_PAGE.METER_CATEGORY_LABEL' | translate}}</ion-label>
+    <ion-select class="meter-category-select" [value]="meterCategory" interface="popover"
+                [okText]="'BUTTONS.OK' | translate" [cancelText]="'BUTTONS.CANCEL' | translate">
+      <ion-select-option [value]="mCategory.Electricity">{{'METER_CATEGORIES.ELECTRICITY' | translate}}</ion-select-option>
+      <ion-select-option [value]="mCategory.Gas">{{'METER_CATEGORIES.GAS' | translate}}</ion-select-option>
+      <ion-select-option [value]="mCategory.Water">{{'METER_CATEGORIES.WATER' | translate}}</ion-select-option>
+    </ion-select>
+  </ion-item>
   <ion-toolbar>
     <ion-buttons slot="end">
       <ion-button (click)="confirmModal()">{{'BUTTONS.CONFIRM' | translate}}</ion-button>

@@ -9,9 +9,12 @@ export class ReadMeterService {
 
   constructor(private readonly httpClient: HttpClient) { }
 
-  read(image: string) {
+  read(image: string, language?: string) {
     const formData = new FormData();
     formData.append('image', this.dataURItoBlob(image));
+    if (language) {
+      formData.append('language', language);
+    }
 
     return this.httpClient.post<ReadMeterResult>('ReadMeter', formData).toPromise();
   }

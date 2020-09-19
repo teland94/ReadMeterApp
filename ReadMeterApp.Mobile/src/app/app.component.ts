@@ -30,6 +30,7 @@ export class AppComponent implements OnInit {
       name: 'SETTINGS_PAGE'
     },
   ];
+  public path: string;
 
   constructor(
     private platform: Platform,
@@ -63,7 +64,11 @@ export class AppComponent implements OnInit {
         });
       });
       this.platform.backButton.subscribe(() => {
-        this.location.back();
+        if (this.path !== 'home') {
+          this.location.back();
+        } else {
+          navigator['app'].exitApp();
+        }
       });
     });
   }
@@ -71,10 +76,10 @@ export class AppComponent implements OnInit {
   async ngOnInit() {
     this.router.events.subscribe(val => {
       if (!(val instanceof NavigationEnd)) { return; }
-      const path = window.location.pathname.split('/')[1];
-      if (path !== undefined) {
+      this.path = window.location.pathname.split('/')[1];
+      if (this.path !== undefined) {
         const pageIndex = this.appPages.findIndex(
-            page => page.name.replace('_PAGE', '').toLowerCase() === path.toLowerCase());
+            page => page.name.replace('_PAGE', '').toLowerCase() === this.path.toLowerCase());
         this.selectedIndex = pageIndex > -1 ? pageIndex : 0;
       }
     });

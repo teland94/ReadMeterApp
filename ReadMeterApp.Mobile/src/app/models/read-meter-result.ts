@@ -1,5 +1,5 @@
 export class ReadMeterResult {
-    meterCategory: string;
+    meterCategory: MeterCategory;
     displayType: string;
     messages: Message[];
     displayValue: string;
@@ -10,4 +10,10 @@ export class Message {
     messageId: string;
     messageText: string;
     objectId: string;
+}
+
+export enum MeterCategory {
+    Electricity = 'electricity',
+    Gas = 'gas',
+    Water = 'water'
 }

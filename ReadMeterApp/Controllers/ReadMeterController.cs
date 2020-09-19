@@ -34,7 +34,7 @@ namespace ReadMeterApp.Controllers
 
             try
             {
-                var readerData = await BlickerService.Read(imageData);
+                var readerData = await BlickerService.Read(imageData, model.Language);
                 var meter = readerData.Objects.Meter.FirstOrDefault();
                 return Ok(new ReadMeterResult
                 {

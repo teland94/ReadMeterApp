@@ -7,5 +7,7 @@ namespace ReadMeterApp.ViewModels
     {
         [Required]
         public IFormFile Image { get; set; }
+
+        public string Language { get; set; }
     }
 }

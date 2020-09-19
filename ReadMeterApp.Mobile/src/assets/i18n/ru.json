@@ -26,10 +26,16 @@
     "METER_READING_SENT_ERROR": "Ошибка отправки показаний счетчика",
     "PERSONAL_ACCOUNT_NOT_SET_ERROR": "Не задан лицевой счет",
     "PLEASE_WAIT": "Пожалуйста, подождите...",
-    "UNREAD_ERROR": "Непрочитанные показания счетчика"
+    "UNREAD_METER_READING_ERROR": "Непрочитанные показания счетчика"
   },
   "BUTTONS": {
+    "OK": "ОК",
     "CONFIRM": "Подтвердить",
     "CANCEL": "Отмена"
+  },
+  "METER_CATEGORIES": {
+    "ELECTRICITY": "Электрический",
+    "GAS": "Газовый",
+    "WATER": "Водный"
   }
 }

@@ -26,10 +26,16 @@
     "METER_READING_SENT_ERROR": "Meter reading sending error",
     "PERSONAL_ACCOUNT_NOT_SET_ERROR": "Personal account not set",
     "PLEASE_WAIT": "Please wait...",
-    "UNREAD_ERROR": "Unread meter reading"
+    "UNREAD_METER_READING_ERROR": "Unread meter reading"
   },
   "BUTTONS": {
+    "OK": "OK",
     "CONFIRM": "Confirm",
     "CANCEL": "Cancel"
+  },
+  "METER_CATEGORIES": {
+    "ELECTRICITY": "Electricity",
+    "GAS": "Gas",
+    "WATER": "Water"
   }
 }

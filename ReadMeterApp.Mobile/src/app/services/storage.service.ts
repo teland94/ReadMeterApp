@@ -1,48 +1,29 @@
 import { Injectable } from '@angular/core';
-import { Storage as NativeStorage } from '@ionic/storage';
-import { Platform } from '@ionic/angular';
+import { Plugins } from '@capacitor/core';
+
+const { Storage } = Plugins;
 
 @Injectable({
   providedIn: 'root'
 })
 export class StorageService {
 
-  private readonly storage: Storage | NativeStorage;
-
-  constructor(private readonly nativeStorage: NativeStorage,
-              private readonly platform: Platform) {
-    if (this.platform.is('cordova')) {
-      this.storage = localStorage;
-    } else {
-      this.storage = localStorage;
-    }
-  }
+  constructor() { }
 
   async getItem(key: string) {
-    if (this.storage instanceof NativeStorage) {
-      await this.storage.get(key);
-    } else {
-      return await this.storage.getItem(key);
-    }
+    const { value } = await Storage.get({ key });
+    return value;
   }
 
   async setItem(key: string, value: any) {
-    if (this.storage instanceof NativeStorage) {
-      await this.storage.set(key, value);
-    } else {
-      await this.storage.setItem(key, value);
-    }
+    await Storage.set({ key, value });
   }
 
   async removeItem(key: string) {
-    if (this.storage instanceof NativeStorage) {
-      await this.storage.remove(key);
-    } else {
-      await this.storage.removeItem(key);
-    }
+    await Storage.remove({ key });
   }
 
   async clear() {
-    await this.storage.clear();
+    await Storage.clear();
   }
 }
