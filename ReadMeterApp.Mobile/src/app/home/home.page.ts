@@ -55,31 +55,12 @@ export class HomePage implements OnInit, OnDestroy {
   }
 
   async cameraClick() {
-    if (!this.settings || !this.settings.personalAccount) {
-      await this.toastService.error(this.translateService.instant('MESSAGES.PERSONAL_ACCOUNT_NOT_SET_ERROR'));
-      return;
-    }
     await this.loadCameraImage();
     await this.read();
   }
 
   async readClick() {
-    if (!this.settings || !this.settings.personalAccount) {
-      await this.toastService.error(this.translateService.instant('MESSAGES.PERSONAL_ACCOUNT_NOT_SET_ERROR'));
-      return;
-    }
     await this.read();
-  }
-
-  async sendSmsClick() {
-    if (!this.result) { return; }
-    try {
-      await this.sendSms(this.settings.personalAccount, this.result.displayValue, this.result.meterCategory);
-      await this.toastService.success(this.translateService.instant('MESSAGES.METER_READING_SENT_SUCCESS'));
-    } catch (e) {
-      console.log(e);
-      await this.toastService.error(this.translateService.instant('MESSAGES.METER_READING_SENT_ERROR'));
-    }
   }
 
   handleFileInput(files: FileList) {
@@ -91,6 +72,27 @@ export class HomePage implements OnInit, OnDestroy {
     if (file) {
       this.file = file;
       reader.readAsDataURL(this.file);
+    }
+  }
+
+  private async sendSms() {
+    if (!this.result) { return; }
+    const { displayValue, meterCategory } = this.result;
+    const { phoneNumber, personalAccount } = this.settings.communalServices.find(cs => cs.category.toString() === meterCategory.toString());
+    if (!phoneNumber) {
+      await this.toastService.error(this.translateService.instant('MESSAGES.PHONE_NUMBER_NOT_SET_ERROR'));
+      return;
+    }
+    if (!personalAccount) {
+      await this.toastService.error(this.translateService.instant('MESSAGES.PERSONAL_ACCOUNT_NOT_SET_ERROR'));
+      return;
+    }
+    try {
+      await this.sms.send(phoneNumber, `${personalAccount} ${displayValue}`);
+      await this.toastService.success(this.translateService.instant('MESSAGES.METER_READING_SENT_SUCCESS'));
+    } catch (e) {
+      console.log(e);
+      await this.toastService.error(this.translateService.instant('MESSAGES.METER_READING_SENT_ERROR'));
     }
   }
 
@@ -107,13 +109,7 @@ export class HomePage implements OnInit, OnDestroy {
       const modal = await this.presentModal(readMeterViewResult.displayValue, readMeterViewResult.meterCategory);
       const { data } = await modal.onWillDismiss();
       if (data && data.confirmed) {
-        try {
-          await this.sendSms(this.settings.personalAccount, readMeterViewResult.displayValue, readMeterViewResult.meterCategory);
-          await this.toastService.success(this.translateService.instant('MESSAGES.METER_READING_SENT_SUCCESS'));
-        } catch (e) {
-          console.log(e);
-          await this.toastService.error(this.translateService.instant('MESSAGES.METER_READING_SENT_ERROR'));
-        }
+        await this.sendSms();
       }
     } catch (e) {
       console.log(e);
@@ -161,20 +157,5 @@ export class HomePage implements OnInit, OnDestroy {
     });
     await modal.present();
     return modal;
-  }
-
-  private async sendSms(personalAccount: string, displayValue: string, meterCategory: MeterCategory) {
-    let smsNumber;
-    switch (meterCategory) {
-      case MeterCategory.Electricity:
-        smsNumber = '123';
-        break;
-      case MeterCategory.Gas:
-        smsNumber = '456';
-        break;
-    }
-    if (smsNumber) {
-      await this.sms.send(smsNumber, `${personalAccount} ${displayValue}`);
-    }
   }
 }

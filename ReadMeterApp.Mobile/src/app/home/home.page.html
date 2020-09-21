@@ -34,19 +34,6 @@
     <ion-item *ngIf="result && !isCordova">
       {{result | json}}
     </ion-item>
-<!--    <ion-list *ngIf="result && result.displayValue && result.meterCategory">-->
-<!--      <ion-item>-->
-<!--        <ion-label>{{'RESULT_PAGE.METER_READING_LABEL' | translate}}</ion-label>-->
-<!--        <ion-note class="end-note" slot="end" color="primary">{{result.displayValue}}</ion-note>-->
-<!--      </ion-item>-->
-<!--      <ion-item>-->
-<!--        <ion-label>{{'RESULT_PAGE.METER_CATEGORY_LABEL' | translate}}</ion-label>-->
-<!--        <ion-note class="end-note" slot="end" color="secondary">{{getMeterCategoryText(result.meterCategory)}}</ion-note>-->
-<!--      </ion-item>-->
-<!--      <ion-item>-->
-<!--        <ion-button slot="end" (click)="sendSmsClick()">{{'HOME_PAGE.SEND_BUTTON' | translate}}</ion-button>-->
-<!--      </ion-item>-->
-<!--    </ion-list>-->
     <ion-fab vertical="bottom" horizontal="center" slot="fixed">
       <ion-fab-button *ngIf="isCordova" (click)="cameraClick()">
         <ion-icon name="camera"></ion-icon>

@@ -8,9 +8,24 @@
 </ion-header>
 
 <ion-content>
-  <ion-item>
-    <ion-label position="stacked">{{'SETTINGS_PAGE.PERSONAL_ACCOUNT_INPUT_LABEL' | translate}}</ion-label>
-    <ion-input type="numeric" [placeholder]="'SETTINGS_PAGE.PERSONAL_ACCOUNT_INPUT_PLACEHOLDER' | translate"
-               [(ngModel)]="settings.personalAccount" name="personalAccount"></ion-input>
-  </ion-item>
+  <ion-item-group *ngIf="settings.communalServices && settings.communalServices.length > 0">
+    <ion-item-divider>
+      <ion-label>{{'SETTINGS_PAGE.COMMUNAL_SERVICES_LABEL' | translate}}</ion-label>
+    </ion-item-divider>
+    <ion-item-group *ngFor="let communalService of settings.communalServices; trackBy: identify">
+      <ion-item-divider>
+        <ion-label>{{'COMMUNAL_SERVICES_CATEGORIES.' + communalService.category.toUpperCase() | translate}}</ion-label>
+      </ion-item-divider>
+      <ion-item>
+        <ion-label position="stacked">{{'SETTINGS_PAGE.PERSONAL_ACCOUNT_INPUT_LABEL' | translate}}</ion-label>
+        <ion-input type="numeric" [placeholder]="'SETTINGS_PAGE.PERSONAL_ACCOUNT_INPUT_PLACEHOLDER' | translate"
+                   [(ngModel)]="communalService.personalAccount"></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-label position="stacked">{{'SETTINGS_PAGE.PHONE_NUMBER_INPUT_LABEL' | translate}}</ion-label>
+        <ion-input type="numeric" [placeholder]="'SETTINGS_PAGE.PHONE_NUMBER_INPUT_PLACEHOLDER' | translate"
+                   [(ngModel)]="communalService.phoneNumber"></ion-input>
+      </ion-item>
+    </ion-item-group>
+  </ion-item-group>
 </ion-content>

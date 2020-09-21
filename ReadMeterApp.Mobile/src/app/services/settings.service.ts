@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { ReplaySubject } from 'rxjs';
-import { Settings } from '../models/settings.model';
+import {CommunalServiceCategory, Settings} from '../models/settings.model';
 import { StorageService } from './storage.service';
 
 @Injectable({
@@ -23,6 +23,28 @@ export class SettingsService {
   }
 
   async fetch() {
-    this.settings = JSON.parse(await this.storage.getItem('settings'));
+    let settings = JSON.parse(await this.storage.getItem('settings'));
+    if (!settings) {
+      settings = new Settings();
+    }
+    if (!settings.communalServices) {
+      settings.communalServices = [{
+        id: 1,
+        personalAccount: null,
+        phoneNumber: null,
+        category: CommunalServiceCategory.Electricity
+      }, {
+        id: 2,
+        personalAccount: null,
+        phoneNumber: null,
+        category: CommunalServiceCategory.Gas
+      }, {
+        id: 3,
+        personalAccount: null,
+        phoneNumber: null,
+        category: CommunalServiceCategory.Water
+      }];
+    }
+    this.settings = settings;
   }
 }

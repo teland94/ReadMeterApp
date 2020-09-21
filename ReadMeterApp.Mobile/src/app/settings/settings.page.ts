@@ -1,6 +1,6 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {SettingsService} from '../services/settings.service';
-import {Settings} from '../models/settings.model';
+import {CommunalServiceCategory, Settings} from '../models/settings.model';
 import {Subscription} from 'rxjs';
 
 @Component({
@@ -12,7 +12,8 @@ export class SettingsPage implements OnInit, OnDestroy {
 
   private settingsSubscription: Subscription;
 
-  settings: Settings = { };
+  settings: Settings;
+  communalServiceCategory = CommunalServiceCategory;
 
   constructor(private readonly settingsService: SettingsService) { }
 
@@ -21,6 +22,10 @@ export class SettingsPage implements OnInit, OnDestroy {
       if (!data) { return; }
       this.settings = data;
     });
+  }
+
+  identify(index, item) {
+    return item.id;
   }
 
   async ngOnDestroy() {

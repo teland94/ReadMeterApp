@@ -17,13 +17,17 @@
   },
   "SETTINGS_PAGE": {
     "TITLE": "Настройки",
-    "PERSONAL_ACCOUNT_INPUT_LABEL": "Лицевой Счет",
-    "PERSONAL_ACCOUNT_INPUT_PLACEHOLDER": "Введите ваш лицевой счет"
+    "COMMUNAL_SERVICES_LABEL": "Коммунальные службы",
+    "PERSONAL_ACCOUNT_INPUT_LABEL": "Лицевой счет",
+    "PERSONAL_ACCOUNT_INPUT_PLACEHOLDER": "Введите ваш лицевой счет",
+    "PHONE_NUMBER_INPUT_LABEL": "Номер телефона",
+    "PHONE_NUMBER_INPUT_PLACEHOLDER": "Введите номер телефона коммунальной службы"
   },
   "MESSAGES": {
     "NO_METER_ERROR": "Счетчик не найден",
     "METER_READING_SENT_SUCCESS": "Показания счетчика успешно отправлены",
     "METER_READING_SENT_ERROR": "Ошибка отправки показаний счетчика",
+    "PHONE_NUMBER_NOT_SET_ERROR": "Не задан номер телефона",
     "PERSONAL_ACCOUNT_NOT_SET_ERROR": "Не задан лицевой счет",
     "PLEASE_WAIT": "Пожалуйста, подождите...",
     "UNREAD_METER_READING_ERROR": "Непрочитанные показания счетчика"
@@ -37,5 +41,10 @@
     "ELECTRICITY": "Электрический",
     "GAS": "Газовый",
     "WATER": "Водный"
+  },
+  "COMMUNAL_SERVICES_CATEGORIES": {
+    "ELECTRICITY": "Электричество",
+    "GAS": "Газ",
+    "WATER": "Вода"
   }
 }
