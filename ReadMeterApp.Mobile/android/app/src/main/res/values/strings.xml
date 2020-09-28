@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='utf-8'?>
 <resources>
-    <string name="app_name">ReadMeterApp</string>
-    <string name="title_activity_main">ReadMeterApp</string>
-    <string name="package_name">io.ionic.starter</string>
-    <string name="custom_url_scheme">io.ionic.starter</string>
+    <string name="app_name">Read Meter</string>
+    <string name="title_activity_main">Read Meter</string>
+    <string name="package_name">io.ionic.read.meter</string>
+    <string name="custom_url_scheme">io.ionic.read.meter</string>
 </resources>

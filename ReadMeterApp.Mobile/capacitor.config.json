@@ -1,6 +1,6 @@
 {
-  "appId": "io.ionic.starter",
-  "appName": "ReadMeterApp",
+  "appId": "io.ionic.read.meter",
+  "appName": "Read Meter",
   "bundledWebRuntime": false,
   "npmClient": "npm",
   "webDir": "www",
