@@ -3,26 +3,21 @@ using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
+using ReadMeterApp.Configuration;
 using ReadMeterApp.Exceptions;
+using ReadMeterApp.Interfaces;
 using ReadMeterApp.Models;
 
 namespace ReadMeterApp.Services
 {
-    public interface IBlickerService
-    {
-        Task<BlickerResult> Read(byte[] image, string language);
-
-        Task<AliveResult> Alive();
-    }
-
     public class BlickerService : IDisposable, IBlickerService
     {
         private readonly HttpClient _httpClient;
 
-        public BlickerService()
+        public BlickerService(BlickerSettings blickerSettings)
         {
-            _httpClient = new HttpClient {BaseAddress = new Uri("https://api.blicker.ai")};
-            _httpClient.DefaultRequestHeaders.Add("subscription-key", "84fa0c01037b4b48b38e5a2582aaafc9");
+            _httpClient = new HttpClient {BaseAddress = new Uri(blickerSettings.BaseAddress)};
+            _httpClient.DefaultRequestHeaders.Add("subscription-key", blickerSettings.SubscriptionKey);
         }
 
         public async Task<BlickerResult> Read(byte[] image, string language)
